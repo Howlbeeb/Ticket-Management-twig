@@ -1,0 +1,214 @@
+{% extends 'base.twig' %}
+
+{% block title %}Tickets - TicketFlow{% endblock %}
+
+{% block layout %}
+    {% include 'components/dashboard-header.twig' %}
+    {% include 'components/sidebar.twig' with {'page': 'tickets'} %}
+
+    <main class="pt-20 lg:pl-64 px-4">
+        <h1 class="text-2xl font-bold mb-6">Ticket Management</h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {# === Add Ticket Form === #}
+            <div class="form-section">
+                <form id="ticket-form" class="space-y-3">
+                    <input type="hidden" id="ticket-id">
+                    <h3 class="font-semibold mb-4">Add Ticket</h3>
+                    <div>
+                        <label class="block text-sm">Title</label>
+                        <input id="title" type="text" class="w-full p-2 border dark:border-gray-500 rounded border-slate-200">
+                        <span class="text-sm text-red-600 hidden" id="title-error"></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm">Status</label>
+                            <select id="status" class="w-full p-2 border rounded dark:border-gray-500 border-slate-200">
+                                <option value="open">open</option>
+                                <option value="in_progress">in_progress</option>
+                                <option value="closed">closed</option>
+                            </select>
+                            <span class="text-sm text-red-600 hidden" id="status-error"></span>
+                        </div>
+                        <div>
+                            <label class="block text-sm">Priority</label>
+                            <select id="priority" class="w-full p-2 border rounded dark:border-gray-500 border-slate-200">
+                                <option value="low">low</option>
+                                <option value="medium">medium</option>
+                                <option value="high">high</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm">Description</label>
+                        <textarea id="description" rows="4" class="w-full p-2 border rounded dark:border-gray-500 border-slate-200"></textarea>
+                        <span class="text-sm text-red-600 hidden" id="description-error"></span>
+                    </div>
+                    <div class="flex items-center gap-3 justify-end">
+                        <button type="submit" class="px-4 py-2 bg-orange-400 text-white rounded w-full md:w-auto">Save</button>
+                    </div>
+                </form>
+            </div>
+
+            {# === Ticket Cards === #}
+            <div id="ticket-list" class="flex flex-col gap-4"></div>
+        </div>
+    </main>
+
+    {# === Edit Ticket Modal === #}
+   <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-[#3a3734] p-6 rounded shadow w-full max-w-lg">
+            <h2 class="text-xl font-semibold mb-4">Edit Ticket</h2>
+            <form id="edit-ticket-form" class="space-y-4">
+                <input type="hidden" id="edit-ticket-id">
+
+                <div>
+                    <label class="block text-sm mb-1">Title</label>
+                    <input id="edit-title" type="text" class="w-full p-2 border rounded dark:border-gray-500 dark:bg-gray-700">
+                    <span class="text-sm text-red-600 hidden" id="edit-title-error"></span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm mb-1">Status</label>
+                        <select id="edit-status" class="w-full p-2 border rounded dark:border-gray-500 dark:bg-gray-700">
+                            <option value="open">open</option>
+                            <option value="in_progress">in_progress</option>
+                            <option value="closed">closed</option>
+                        </select>
+                        <span class="text-sm text-red-600 hidden" id="edit-status-error"></span>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Priority</label>
+                        <select id="edit-priority" class="w-full p-2 border rounded dark:border-gray-500 dark:bg-gray-700">
+                            <option value="low">low</option>
+                            <option value="medium">medium</option>
+                            <option value="high">high</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm mb-1">Description</label>
+                    <textarea id="edit-description" rows="4" class="w-full p-2 border rounded dark:border-gray-500 dark:bg-gray-700"></textarea>
+                    <span class="text-sm text-red-600 hidden" id="edit-description-error"></span>
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button type="button" id="close-modal" class="px-4 py-2 border rounded">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    let tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+
+    const list = document.getElementById('ticket-list');
+    const modal = document.getElementById('edit-modal');
+    const closeModal = document.getElementById('close-modal');
+
+    function showToast(msg) { alert(msg); }
+
+    function renderTickets() {
+        list.innerHTML = '';
+        if (!tickets.length) {
+            list.innerHTML = `<p class="text-gray-500 dark:text-gray-400">No tickets yet.</p>`;
+            return;
+        }
+
+        tickets.forEach(ticket => {
+            const card = document.createElement('article');
+            card.className = 'flex flex-col p-4 bg-white rounded shadow dark:bg-[#3a3734]';
+            card.innerHTML = `
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h3 class="font-semibold">${ticket.title}</h3>
+                        <p class="text-sm text-slate-500 mt-2 dark:text-slate-400">${ticket.description?.slice(0,120) || 'No description'}</p>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold ${
+                            ticket.status === 'open' ? 'bg-green-50 text-green-600' :
+                            ticket.status === 'in_progress' ? 'bg-amber-50 text-amber-600' :
+                            'bg-slate-100 text-slate-600'
+                        }">${ticket.status}</span>
+                        <div class="text-xs text-slate-400 dark:text-slate-500">${new Date(ticket.createdAt).toLocaleString()}</div>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <button class="px-3 py-1 text-green-400 border rounded" onclick="openEditModal(${ticket.id})">Edit</button>
+                    <button class="px-3 py-1 border rounded text-red-600" onclick="deleteTicket(${ticket.id})">Delete</button>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    window.openEditModal = function(id) {
+        const ticket = tickets.find(t => t.id === id);
+        if (!ticket) return;
+        modal.classList.remove('hidden');
+        document.getElementById('edit-ticket-id').value = ticket.id;
+        document.getElementById('edit-title').value = ticket.title;
+        document.getElementById('edit-status').value = ticket.status;
+        document.getElementById('edit-priority').value = ticket.priority || 'medium';
+        document.getElementById('edit-description').value = ticket.description || '';
+    }
+
+    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+
+    document.getElementById('edit-ticket-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const id = document.getElementById('edit-ticket-id').value;
+        const index = tickets.findIndex(t => t.id == id);
+        if (index === -1) return;
+
+        tickets[index] = {
+            ...tickets[index],
+            title: document.getElementById('edit-title').value.trim(),
+            status: document.getElementById('edit-status').value,
+            priority: document.getElementById('edit-priority').value,
+            description: document.getElementById('edit-description').value.trim(),
+            updatedAt: new Date().toISOString()
+        };
+
+        localStorage.setItem('tickets', JSON.stringify(tickets));
+        renderTickets();
+        modal.classList.add('hidden');
+        showToast('Ticket updated');
+    });
+
+    // Add Ticket (side form)
+    document.getElementById('ticket-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const title = document.getElementById('title').value.trim();
+        const status = document.getElementById('status').value;
+        const priority = document.getElementById('priority').value;
+        const description = document.getElementById('description').value.trim();
+
+        if (!title) return alert('Title required');
+
+        tickets.unshift({ id: Date.now(), title, status, priority, description, createdAt: new Date().toISOString() });
+        localStorage.setItem('tickets', JSON.stringify(tickets));
+        renderTickets();
+        document.getElementById('ticket-form').reset();
+        showToast('Ticket added');
+    });
+
+    window.deleteTicket = function(id) {
+        if (confirm('Are you sure?')) {
+            tickets = tickets.filter(t => t.id !== id);
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+            renderTickets();
+            showToast('Ticket deleted');
+        }
+    }
+
+    renderTickets();
+});
+</script>
+{% endblock %}

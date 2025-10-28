@@ -1,0 +1,17 @@
+{
+    "name": "meleyortan/ticket-management-twig",
+    "autoload": {
+        "psr-4": {
+            "Meleyortan\\TicketManagementTwig\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ayantola Abisola Monsurat",
+            "email": "ayantolamonsurat@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.21"
+    }
+}

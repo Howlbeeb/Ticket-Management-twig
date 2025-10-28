@@ -1,0 +1,74 @@
+{% extends 'base.twig' %}
+
+{% block title %}Login - TicketFlow{% endblock %}
+
+{% block content %}
+    <div class="max-w-md mx-auto mt-16 p-6 bg-white rounded-lg shadow-md dark:bg-[#3a3734]">
+        <h1 class="text-2xl font-bold mb-6">Login</h1>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm">Email</label>
+                <input type="email" id="email" class="w-full p-2 border rounded border-slate-200 dark:border-gray-500" required>
+                <span class="text-sm text-red-600 hidden" id="email-error"></span>
+            </div>
+            <div>
+                <label for="password" class="block text-sm">Password</label>
+                <input type="password" id="password" class="w-full p-2 border rounded border-slate-200 dark:border-gray-500" required>
+                <span class="text-sm text-red-600 hidden" id="password-error"></span>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-amber-400 text-white rounded font-semibold">Login</button>
+            <div class="mt-6 text-center text-sm">
+        Don't have an account?
+        <a href="/signup.php">
+          <span class="text-blue-700"> Sign Up</span></a>
+      </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+        emailError.classList.add('hidden');
+        passwordError.classList.add('hidden');
+        let valid = true;
+
+        if (!email.value) {
+            emailError.textContent = 'Email is required';
+            emailError.classList.remove('hidden');
+            valid = false;
+        }
+        if (!password.value) {
+            passwordError.textContent = 'Password is required';
+            passwordError.classList.remove('hidden');
+            valid = false;
+        }
+
+        if (valid) {
+            if (email.value === 'test@example.com' && password.value === 'password') {
+                localStorage.setItem('ticketapp_session', JSON.stringify({
+                    token: 'mock_token',
+                    user: { name: 'Test User', email: 'test@example.com' },
+                    expiresAt: new Date(Date.now() + 3600000 * 3).toISOString()
+                }));
+                showToast('Login successful');
+                window.location.href = '/dashboard.php';
+            } else {
+                showToast('Invalid credentials');
+            }
+        }
+    });
+</script>
+{% endblock %}

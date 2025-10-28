@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TicketFlow{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f59e0b', // amber-400
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-[#292827] dark:text-gray-100 min-h-screen">
+    {% block layout %}
+        <div class="container max-w-7xl mx-auto px-4">
+            {% block content %}{% endblock %}
+        </div>
+    {% endblock %}
+    <div id="toast" class="fixed top-4 right-4 px-4 py-2 bg-gray-800 text-white rounded shadow-lg hidden"></div>
+    {% block script %}{% endblock %}
+</body>
+</html>

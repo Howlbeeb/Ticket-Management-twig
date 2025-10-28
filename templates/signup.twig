@@ -1,0 +1,84 @@
+{% extends 'base.twig' %}
+
+{% block title %}Sign Up - TicketFlow{% endblock %}
+
+{% block content %} 
+    <div class="max-w-md mx-auto mt-16 p-6 bg-white rounded-lg shadow-md dark:bg-[#3a3734]">
+        <h1 class="text-2xl font-bold mb-6">Sign Up</h1>
+        <form id="signup-form" class="space-y-4">
+            <div>
+                <label for="name" class="block text-sm">Name</label>
+                <input type="text" id="name" class="w-full p-2 border rounded border-slate-200 dark:border-gray-500" required>
+                <span class="text-sm text-red-600 hidden" id="name-error"></span>
+            </div>
+            <div>
+                <label for="email" class="block text-sm">Email</label>
+                <input type="email" id="email" class="w-full p-2 border rounded border-slate-200 dark:border-gray-500" required>
+                <span class="text-sm text-red-600 hidden" id="email-error"></span>
+            </div>
+            <div>
+                <label for="password" class="block text-sm">Password</label>
+                <input type="password" id="password" class="w-full p-2 border rounded border-slate-200 dark:border-gray-500" required>
+                <span class="text-sm text-red-600 hidden" id="password-error"></span>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-amber-400 text-white rounded font-semibold">Sign Up</button>
+        <div class="mt-6 text-center text-sm">
+        Already have an account?
+        <a href="/signin.php">
+          <span class="text-blue-700"> Sign In</span></a>
+      </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+        nameError.classList.add('hidden');
+        emailError.classList.add('hidden');
+        passwordError.classList.add('hidden');
+        let valid = true;
+
+        if (!name.value) {
+            nameError.textContent = 'Name is required';
+            nameError.classList.remove('hidden');
+            valid = false;
+        }
+        if (!email.value) {
+            emailError.textContent = 'Email is required';
+            emailError.classList.remove('hidden');
+            valid = false;
+        }
+        if (!password.value) {
+            passwordError.textContent = 'Password is required';
+            passwordError.classList.remove('hidden');
+            valid = false;
+        }
+
+        if (valid) {
+            // Simulate signup
+            localStorage.setItem('ticketapp_session', JSON.stringify({
+                token: 'mock_token',
+                user: { name: name.value, email: email.value },
+                expiresAt: new Date(Date.now() + 3600000 * 3).toISOString()
+            }));
+            showToast('Signup successful');
+            window.location.href = '/signin.php';
+        }
+    });
+</script>
+{% endblock %}

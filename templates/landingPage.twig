@@ -1,0 +1,22 @@
+{% extends 'base.twig' %}
+
+{% block title %}Welcome to TicketFlow{% endblock %}
+
+{% block content %}
+    {% include 'components/Home-header.twig' %}
+    {% include 'components/hero.twig' %}
+    <!-- Add other sections if needed -->
+{% endblock %}
+
+{% block footer %}{% endblock %} {# Override if different footer needed #}
+
+{% block script %}
+<script>
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+</script>
+{% endblock %}
