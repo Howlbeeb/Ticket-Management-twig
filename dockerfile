@@ -19,6 +19,13 @@ RUN chown -R www-data:www-data /var/www/html
 # Change Apache DocumentRoot to /var/www/html/public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
+# Copy composer and install dependencies
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Allow .htaccess overrides for all directories
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
 # Expose port 80
 EXPOSE 80
 

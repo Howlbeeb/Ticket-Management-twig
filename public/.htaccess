@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Serve existing files directly
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Map "clean" URLs (like /dashboard) to their PHP files
+    RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+    RewriteRule ^(.*)$ $1.php [L,QSA]
+
+    # Default route
+    DirectoryIndex index.php
+</IfModule>

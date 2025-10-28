@@ -5,40 +5,49 @@
     {% include 'components/Home-header.twig' %}
     {% include 'components/hero.twig' %}
     <!-- Add other sections if needed -->
-<section class="container-centered ml-18 grid gap-4 lg:grid-cols-3">
-    <div class="card flex flex-col gap-4">
-        <h4 class="font-semibold text-2xl flex items-center gap-4">
-            <!-- Replace with your SVG or icon class -->
-            <span class="icon-fast-setup"></span>
-            Fast setup
-        </h4>
-        <p class="mt-2 text-sm text-slate-600">
-            Start with the provided test user or sign up.
-        </p>
-    </div>
+<section class="mx-auto px-4 max-w-7xl py-12 grid gap-6 lg:grid-cols-3">
+  <div class="rounded-lg shadow-[0_8px_24px_rgba(2,6,23,0.06)] p-[18px] flex flex-col gap-4">
+    <h4 class="font-semibold text-2xl flex items-center gap-4">
+<!-- MdOutlinePhonelinkSetup -->
+      <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M7 4h10v16H7z" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 8h4M10 12h4M10 16h4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Fast setup
+    </h4>
+    <p class="mt-2 text-sm text-slate-600">
+      Start with the provided test user or sign up.
+    </p>
+  </div>
 
-    <div class="card flex flex-col gap-4">
-        <h4 class="font-semibold text-2xl flex items-center gap-4">
-            <!-- Replace with your SVG or icon class -->
-            <span class="icon-create-ticket"></span>
-            Create Tickets
-        </h4>
-        <p class="mt-2 text-sm text-slate-600">
-            Submit new tickets instantly with validation and automatic tracking.
-        </p>
-    </div>
+  <div class="rounded-lg shadow-[0_8px_24px_rgba(2,6,23,0.06)] p-[18px] flex flex-col gap-4">
+    <h4 class="font-semibold text-2xl flex items-center gap-4">
+      <!-- LuTicket -->
+      <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 4h16v4a2 2 0 010 4v4a2 2 0 010 4v4H4v-4a2 2 0 010-4v-4a2 2 0 010-4V4z" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Create Tickets
+    </h4>
+    <p class="mt-2 text-sm text-slate-600">
+      Submit new tickets instantly with validation and automatic tracking.
+    </p>
+  </div>
 
-    <div class="card flex flex-col gap-4">
-        <h4 class="font-semibold text-2xl flex items-center gap-4">
-            <!-- Replace with your SVG or icon class -->
-            <span class="icon-manage-history"></span>
-            View & Manage
-        </h4>
-        <p class="mt-2 text-sm text-slate-600">
-            See open, in-progress, and closed tickets all in one organized dashboard.
-        </p>
-    </div>
+  <div class="rounded-lg shadow-[0_8px_24px_rgba(2,6,23,0.06)] p-[18px] flex flex-col gap-4">
+    <h4 class="font-semibold text-2xl flex items-center gap-4">
+      <!-- MdManageHistory -->
+      <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 8v4l3 3M4 4v16h16V4H4z" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      View & Manage
+    </h4>
+    <p class="mt-2 text-sm text-slate-600">
+      See open, in-progress, and closed tickets all in one organized dashboard.
+    </p>
+  </div>
 </section>
+
+
 {% include 'components/footer.twig' %}
 {% endblock %}
 
