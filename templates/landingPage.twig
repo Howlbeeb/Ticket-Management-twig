@@ -1,14 +1,47 @@
-{% extends 'base.twig' %}
-
+{% extends 'baseLanding.twig' %}
 {% block title %}Welcome to TicketFlow{% endblock %}
 
 {% block content %}
     {% include 'components/Home-header.twig' %}
     {% include 'components/hero.twig' %}
     <!-- Add other sections if needed -->
+<section class="container-centered ml-18 grid gap-4 lg:grid-cols-3">
+    <div class="card flex flex-col gap-4">
+        <h4 class="font-semibold text-2xl flex items-center gap-4">
+            <!-- Replace with your SVG or icon class -->
+            <span class="icon-fast-setup"></span>
+            Fast setup
+        </h4>
+        <p class="mt-2 text-sm text-slate-600">
+            Start with the provided test user or sign up.
+        </p>
+    </div>
+
+    <div class="card flex flex-col gap-4">
+        <h4 class="font-semibold text-2xl flex items-center gap-4">
+            <!-- Replace with your SVG or icon class -->
+            <span class="icon-create-ticket"></span>
+            Create Tickets
+        </h4>
+        <p class="mt-2 text-sm text-slate-600">
+            Submit new tickets instantly with validation and automatic tracking.
+        </p>
+    </div>
+
+    <div class="card flex flex-col gap-4">
+        <h4 class="font-semibold text-2xl flex items-center gap-4">
+            <!-- Replace with your SVG or icon class -->
+            <span class="icon-manage-history"></span>
+            View & Manage
+        </h4>
+        <p class="mt-2 text-sm text-slate-600">
+            See open, in-progress, and closed tickets all in one organized dashboard.
+        </p>
+    </div>
+</section>
+{% include 'components/footer.twig' %}
 {% endblock %}
 
-{% block footer %}{% endblock %} {# Override if different footer needed #}
 
 {% block script %}
 <script>
